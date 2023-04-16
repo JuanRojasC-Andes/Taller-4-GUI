@@ -57,7 +57,12 @@ public class MainFrame extends JFrame {
 		this.addMouseListener(gameBoard);
 	}
 	
-	public void refresh() {
+	public void refreshAll() {
 		this.gameBoard.refresh(settingsMenu.getBoardOption()[0], settingsMenu.getBoardOption()[1]);
+		this.infoGameDisplay.setPlayer(this.optionsMenu.getGamer());
+	}
+	
+	public void refreshData() {
+		this.infoGameDisplay.setPlayer(this.optionsMenu.getGamer());
 	}
 }

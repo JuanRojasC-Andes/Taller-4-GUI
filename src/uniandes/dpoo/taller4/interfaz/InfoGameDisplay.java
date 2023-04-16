@@ -58,4 +58,12 @@ public class InfoGameDisplay extends JPanel {
 		this.add(panelCol1);
 		this.add(panelCol2);
 	}
+	
+	public void setPlayer(String namePlayer) {
+		this.labelNamePlayer.setText(namePlayer);
+	}
+	
+	public void setNumberPlays(Integer plays) {
+		this.labelInfoNumberPlays.setText(plays.toString());
+	}
 }

@@ -1,5 +1,6 @@
 package uniandes.dpoo.taller4.interfaz;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -10,18 +11,31 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
 public class OptionsMenu extends JPanel {
 	
+	// MAIN FRAME
 	private MainFrame mainFrame;
 	
+	// COMPONENTS
 	private JButton btnNewGame;
 	private JButton btnRestartGame;
 	private JButton btnTop10;
 	private JButton btnChangeGamer;
+	
+	// DATA
+	private String gamer;
 	
 	public OptionsMenu(MainFrame mainFrame) {
 		this.mainFrame = mainFrame;
@@ -29,6 +43,7 @@ public class OptionsMenu extends JPanel {
 		this.btnRestartGame = new JButton("REINICIAR");
 		this.btnTop10 = new JButton("TOP-10");
 		this.btnChangeGamer = new JButton("CAMBIAR JUGADOR");
+		this.gamer = "";
 		configOptionsMenu();
 		configBtnNewGame();
 		configBtnRestartGame();
@@ -77,7 +92,7 @@ public class OptionsMenu extends JPanel {
 		this.btnNewGame.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("boton nuevo juego oprimido");
+				dialogForNameUser("Nuevo Juego", "Nombre Jugador", "Iniciar", true);
 			}
 		});
 	}
@@ -90,7 +105,7 @@ public class OptionsMenu extends JPanel {
 		this.btnRestartGame.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				mainFrame.refresh();
+				mainFrame.refreshAll();
 			}
 		});
 	}
@@ -116,9 +131,61 @@ public class OptionsMenu extends JPanel {
 		this.btnChangeGamer.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("boton cambiar jugador oprimido");
+				dialogForNameUser("Cambiar Jugador", "Nombre Jugador", "Cambiar", false);
 			}
 		});
 	}
 
+	private void dialogForNameUser(String titleDialog, String titleLabel, String buttonText, Boolean refreshAll) {
+		// DIALOG
+		JDialog dialog = new JDialog(mainFrame, titleDialog);
+		dialog.setSize(350, 200);
+		dialog.setLocationRelativeTo(mainFrame);
+		dialog.setVisible(true);
+		
+		// LAYOUT
+		dialog.setLayout(new BorderLayout());
+		
+		// COMPONENTS
+		JLabel title = new JLabel(titleLabel);
+		title.setBackground(Constants.blueColor);
+		title.setForeground(Color.WHITE);
+		title.setOpaque(true);
+		title.setFont(new Font(getName(), Font.PLAIN, 14));
+		title.setHorizontalAlignment(SwingConstants.CENTER);
+		title.setBorder(new EmptyBorder(5, 10, 5, 10));
+		dialog.add(title, BorderLayout.NORTH);
+		
+		JPanel centerPanel = new JPanel();
+		centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
+		centerPanel.setBorder(new EmptyBorder(30, 50, 30, 50));
+		
+		JTextField inputNickName = new JTextField();
+		inputNickName.setBorder(new EmptyBorder(5, 5, 5, 5));
+		inputNickName.setHorizontalAlignment(SwingConstants.CENTER);
+		centerPanel.add(inputNickName);
+		
+		centerPanel.add(Box.createRigidArea(new Dimension(200, 20)));
+		
+		JButton btnAccept = new JButton(buttonText);
+		configBtnDefault(btnAccept);
+		btnAccept.setBorder(new EmptyBorder(10, 40, 10 ,40));
+		btnAccept.setAlignmentX(CENTER_ALIGNMENT);
+		btnAccept.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				gamer = inputNickName.getText();
+				dialog.dispose();
+				if (refreshAll) mainFrame.refreshAll();
+				else mainFrame.refreshData();
+			}
+		});
+		centerPanel.add(btnAccept);
+		
+		dialog.add(centerPanel, BorderLayout.CENTER);
+	}
+	
+	public String getGamer() {
+		return gamer;
+	}
 }
