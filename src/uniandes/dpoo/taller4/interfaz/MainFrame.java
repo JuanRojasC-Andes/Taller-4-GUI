@@ -13,9 +13,11 @@ public class MainFrame extends JFrame {
 	}
 	
 	private SettingsMenu settingsMenu;
+	private OptionsMenu optionsMenu;
 	
 	public MainFrame() {
 		this.settingsMenu = new SettingsMenu();
+		this.optionsMenu = new OptionsMenu();
 		
 //		FlatLightLaf.install();
 		
@@ -24,10 +26,11 @@ public class MainFrame extends JFrame {
 	}
 	
 	private void frameSettings() {
-		this.setSize(900, 700);
+		this.setSize(700, 500);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
+		this.setTitle("LightsOut");
 	}
 	
 	private void frameComponents() {
@@ -37,5 +40,6 @@ public class MainFrame extends JFrame {
 		
 		// COMPONENTS
 		this.add(settingsMenu, BorderLayout.NORTH);
+		this.add(optionsMenu, BorderLayout.EAST);
 	}
 }

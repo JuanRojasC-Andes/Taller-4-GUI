@@ -34,6 +34,8 @@ public class SettingsMenu extends JPanel {
 		configLevelButtons();
 	}
 	
+	// PANEL CONFIGURATION
+	
 	private void configSettingsMenu() {
 		// LAYOUT
 		FlowLayout layout = new FlowLayout();
@@ -41,6 +43,11 @@ public class SettingsMenu extends JPanel {
 		
 		// CUSTOMIZATION
 		this.setBackground(Constants.blueColor);
+		this.labelSizeGrid.setForeground(Color.WHITE);
+		this.labelLevel.setForeground(Color.WHITE);
+		this.btnEasyLevel.setForeground(Color.WHITE);
+		this.btnMiddleLevel.setForeground(Color.WHITE);
+		this.btnHardLevel.setForeground(Color.WHITE);
 		
 		// ADD COMPONENTS
 		this.add(labelSizeGrid);
@@ -57,6 +64,8 @@ public class SettingsMenu extends JPanel {
 		this.boxSizeGrid.addItem("3x3");
 		this.boxSizeGrid.addItem("4x4");
 		this.boxSizeGrid.addItem("5x5");
+		
+		this.boxSizeGrid.setSelectedIndex(3);
 		
 		// CUSTOMIZATION
 		this.boxSizeGrid.setForeground(Color.BLACK);
