@@ -2,9 +2,13 @@ package uniandes.dpoo.taller4.interfaz;
 
 import java.awt.Color;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.Iterator;
 
+import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -13,6 +17,7 @@ import javax.swing.JRadioButton;
 
 public class SettingsMenu extends JPanel {
 	
+	// COMPONENTS
 	private JLabel labelSizeGrid;
 	private JComboBox<String> boxSizeGrid;
 	private JLabel labelLevel;
@@ -20,6 +25,10 @@ public class SettingsMenu extends JPanel {
 	private JRadioButton btnMiddleLevel;
 	private JRadioButton btnHardLevel;
 	private ButtonGroup btnLevelGroup;
+	
+	// DATA
+	private Integer[] boardOption;
+	private String level;
 	
 	public SettingsMenu() {
 		this.labelSizeGrid = new JLabel("Tamaño:");
@@ -66,6 +75,7 @@ public class SettingsMenu extends JPanel {
 		this.boxSizeGrid.addItem("5x5");
 		
 		this.boxSizeGrid.setSelectedIndex(3);
+		this.boardOption = new Integer[]{5, 5};
 		
 		// CUSTOMIZATION
 		this.boxSizeGrid.setForeground(Color.BLACK);
@@ -76,6 +86,9 @@ public class SettingsMenu extends JPanel {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 	            String selected = (String) boxSizeGrid.getSelectedItem();
+	            Integer selectedWidth = Integer.parseInt(selected.split("x")[0]);
+	            Integer selectedHeight = Integer.parseInt(selected.split("x")[1]);
+	            boardOption = new Integer[]{selectedWidth, selectedHeight};
 			}
 		});
 	}
@@ -84,6 +97,35 @@ public class SettingsMenu extends JPanel {
 		this.btnLevelGroup.add(btnEasyLevel);
 		this.btnLevelGroup.add(btnMiddleLevel);
 		this.btnLevelGroup.add(btnHardLevel);
+		this.btnEasyLevel.setSelected(true);
+		
+		Iterator<AbstractButton> iterator = this.btnLevelGroup.getElements().asIterator();
+		while(iterator.hasNext()) {
+			JRadioButton btn = (JRadioButton) iterator.next();
+			btn.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					JRadioButton b = (JRadioButton) e.getSource();
+					level = b.getText();
+				}
+			});	
+		}
 	}
 
+	public Integer[] getBoardOption() {
+		return boardOption;
+	}
+
+	public void setBoardOption(Integer[] boardOption) {
+		this.boardOption = boardOption;
+	}
+
+	public String getLevel() {
+		return level;
+	}
+
+	public void setLevel(String level) {
+		this.level = level;
+	}
 }

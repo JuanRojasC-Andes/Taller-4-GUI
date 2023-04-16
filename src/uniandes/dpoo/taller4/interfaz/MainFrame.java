@@ -18,10 +18,12 @@ public class MainFrame extends JFrame {
 	private GameBoard gameBoard;
 	private InfoGameDisplay infoGameDisplay;
 	
+	private Integer[] boardOption;
+	
 	public MainFrame() {
 		this.settingsMenu = new SettingsMenu();
-		this.optionsMenu = new OptionsMenu();
-		this.gameBoard = new GameBoard(5, 5);
+		this.optionsMenu = new OptionsMenu(this);
+		this.gameBoard = new GameBoard(settingsMenu.getBoardOption()[0], settingsMenu.getBoardOption()[1]);
 		this.infoGameDisplay = new InfoGameDisplay();
 		
 //		FlatLightLaf.install();
@@ -36,6 +38,7 @@ public class MainFrame extends JFrame {
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
 		this.setTitle("LightsOut");
+		this.setResizable(false);
 	}
 	
 	private void frameComponents() {
@@ -52,5 +55,9 @@ public class MainFrame extends JFrame {
 		
 		// LISTENERS
 		this.addMouseListener(gameBoard);
+	}
+	
+	public void refresh() {
+		this.gameBoard.refresh(settingsMenu.getBoardOption()[0], settingsMenu.getBoardOption()[1]);
 	}
 }

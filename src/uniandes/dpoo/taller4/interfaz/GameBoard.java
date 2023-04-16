@@ -13,8 +13,11 @@ import javax.swing.border.EmptyBorder;
 
 public class GameBoard extends JPanel implements MouseListener {
 	
-	private final Integer widthCell = 85;
-	private final Integer heightCell = 85;
+	private final Integer widthCellMin = 85;
+	private final Integer heightCellMin = 85;
+	
+	private Integer widthCell = 85;
+	private Integer heightCell = 85;
 	
 	private Integer cellsInX;
 	private Integer cellsInY;
@@ -49,6 +52,9 @@ public class GameBoard extends JPanel implements MouseListener {
 	public void paint(Graphics g) {
 		super.paint(g);
 		Graphics2D g2d = (Graphics2D) g;
+		
+		this.widthCell = (this.widthCellMin * 5) / this.cellsInX;
+		this.heightCell = (this.heightCellMin * 5) / this.cellsInY;
 		
 		for (int y = 0; y < this.cellsInY; y++) {
 			for (int x = 0; x < this.cellsInX; x++) {
@@ -111,6 +117,13 @@ public class GameBoard extends JPanel implements MouseListener {
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	// REFRESH
+	public void refresh(Integer cellsInX, Integer cellsInY) {
+		this.cellsInX = cellsInX;
+		this.cellsInY = cellsInY;
+		paint(this.getGraphics());
 	}
 
 }

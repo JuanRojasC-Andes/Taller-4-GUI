@@ -16,12 +16,15 @@ import javax.swing.border.LineBorder;
 
 public class OptionsMenu extends JPanel {
 	
+	private MainFrame mainFrame;
+	
 	private JButton btnNewGame;
 	private JButton btnRestartGame;
 	private JButton btnTop10;
 	private JButton btnChangeGamer;
 	
-	public OptionsMenu() {
+	public OptionsMenu(MainFrame mainFrame) {
+		this.mainFrame = mainFrame;
 		this.btnNewGame = new JButton("NUEVO");
 		this.btnRestartGame = new JButton("REINICIAR");
 		this.btnTop10 = new JButton("TOP-10");
@@ -87,7 +90,7 @@ public class OptionsMenu extends JPanel {
 		this.btnRestartGame.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("boton reiniciar oprimido");
+				mainFrame.refresh();
 			}
 		});
 	}
