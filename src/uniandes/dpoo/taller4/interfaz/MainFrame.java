@@ -16,11 +16,13 @@ public class MainFrame extends JFrame {
 	private SettingsMenu settingsMenu;
 	private OptionsMenu optionsMenu;
 	private GameBoard gameBoard;
+	private InfoGameDisplay infoGameDisplay;
 	
 	public MainFrame() {
 		this.settingsMenu = new SettingsMenu();
 		this.optionsMenu = new OptionsMenu();
 		this.gameBoard = new GameBoard(5, 5);
+		this.infoGameDisplay = new InfoGameDisplay();
 		
 //		FlatLightLaf.install();
 		
@@ -46,6 +48,7 @@ public class MainFrame extends JFrame {
 		this.add(optionsMenu, BorderLayout.EAST);
 		this.add(gameBoard, BorderLayout.CENTER);
 		this.add(new JPanel(), BorderLayout.WEST);
+		this.add(infoGameDisplay, BorderLayout.SOUTH);
 		
 		// LISTENERS
 		this.addMouseListener(gameBoard);
