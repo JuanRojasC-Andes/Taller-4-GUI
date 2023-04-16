@@ -3,6 +3,7 @@ package uniandes.dpoo.taller4.interfaz;
 import java.awt.BorderLayout;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 import com.formdev.flatlaf.FlatLightLaf;
 
@@ -14,10 +15,12 @@ public class MainFrame extends JFrame {
 	
 	private SettingsMenu settingsMenu;
 	private OptionsMenu optionsMenu;
+	private GameBoard gameBoard;
 	
 	public MainFrame() {
 		this.settingsMenu = new SettingsMenu();
 		this.optionsMenu = new OptionsMenu();
+		this.gameBoard = new GameBoard(5, 5);
 		
 //		FlatLightLaf.install();
 		
@@ -26,7 +29,7 @@ public class MainFrame extends JFrame {
 	}
 	
 	private void frameSettings() {
-		this.setSize(700, 500);
+		this.setSize(680, 550);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
@@ -35,11 +38,16 @@ public class MainFrame extends JFrame {
 	
 	private void frameComponents() {
 		// LAYOUT
-		BorderLayout layout = new BorderLayout();
+		BorderLayout layout = new BorderLayout(10, 10);
 		this.setLayout(layout);
 		
 		// COMPONENTS
 		this.add(settingsMenu, BorderLayout.NORTH);
 		this.add(optionsMenu, BorderLayout.EAST);
+		this.add(gameBoard, BorderLayout.CENTER);
+		this.add(new JPanel(), BorderLayout.WEST);
+		
+		// LISTENERS
+		this.addMouseListener(gameBoard);
 	}
 }

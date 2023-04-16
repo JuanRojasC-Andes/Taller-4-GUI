@@ -41,7 +41,7 @@ public class OptionsMenu extends JPanel {
 		GridBagConstraints constraints = new GridBagConstraints();
 		constraints.gridwidth = GridBagConstraints.REMAINDER;
 		constraints.fill = GridBagConstraints.HORIZONTAL;
-		constraints.insets = new Insets(8, 3, 8, 3);
+		constraints.insets = new Insets(8, 10, 8, 10);
 		
 		// CUSTOMIZATION
 		this.setFont(new Font(getName(), Font.PLAIN, 60));
