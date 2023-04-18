@@ -117,15 +117,7 @@ public class SettingsMenu extends JPanel {
 		return boardOption;
 	}
 
-	public void setBoardOption(Integer[] boardOption) {
-		this.boardOption = boardOption;
-	}
-
 	public String getLevel() {
 		return level;
-	}
-
-	public void setLevel(String level) {
-		this.level = level;
 	}
 }

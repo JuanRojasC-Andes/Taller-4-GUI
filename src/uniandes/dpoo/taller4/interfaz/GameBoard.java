@@ -1,11 +1,14 @@
 package uniandes.dpoo.taller4.interfaz;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
@@ -18,14 +21,21 @@ public class GameBoard extends JPanel implements MouseListener {
 	
 	private Integer widthCell = 85;
 	private Integer heightCell = 85;
+	private Color mainColor;
+	private Color roundColor;
 	
 	private Integer cellsInX;
 	private Integer cellsInY;
 	private BufferedImage image;
 	
+	private List<List<GameCell>> board;
+	
 	public GameBoard(Integer cellsInX, Integer cellsInY) {
 		this.cellsInX = cellsInX;
 		this.cellsInY = cellsInY;
+		this.board = new ArrayList<>();
+		this.mainColor = Constants.yellow;
+		this.roundColor = Color.BLACK;
 		configGameBoard();
 		loadImage();
 	}
@@ -57,35 +67,51 @@ public class GameBoard extends JPanel implements MouseListener {
 		this.heightCell = (this.heightCellMin * 5) / this.cellsInY;
 		
 		for (int y = 0; y < this.cellsInY; y++) {
+			List<GameCell> row = new ArrayList<>();
 			for (int x = 0; x < this.cellsInX; x++) {
-				
 				// RECTANGLE
 				Integer separator = 2;
 				Integer coordinateX = (x * this.widthCell) + (separator * x);
 				Integer coordinateY = (y * this.heightCell) + (separator * y);
-				g2d.setColor(Constants.yellow);
-				g2d.fillRoundRect(coordinateX, coordinateY, widthCell, heightCell, 10, 10);
 				
 				// IMAGE
 				Integer coordinateXImage = coordinateX +  ((this.widthCell - image.getWidth()) / 2);
 				Integer coordinateYImage = coordinateY + ((this.heightCell - image.getHeight()) / 2);
-				g2d.drawImage(image, null, coordinateXImage, coordinateYImage);
-			}	
+				
+				// CELL DATA
+				GameCell gameCell = new GameCell(
+						coordinateX, 
+						coordinateY, 
+						this.widthCell, 
+						this.heightCell, 
+						coordinateXImage, 
+						coordinateYImage,
+						this.mainColor,
+						this.roundColor
+						);
+				
+				// PAINT
+				paintCell(gameCell, g);
+				
+				// REGISTER
+				row.add(gameCell);
+			}
+			this.board.add(row);
 		}
 	}
 	
-	// LOCALIZE CLICK OF MOUSE
-	@Override
-	public void mousePressed(MouseEvent e) {
-		Integer clickX = e.getX();
-		Integer clickY = e.getY();
-		Integer[] casilla = convertirCoordenadasACasilla(clickX, clickY);
-//		cantidades[casilla[0]][casilla[1]]++; principal.jugar(casilla[0], casilla[1]);
-//		this.ultima_fila = casilla[0];
-//		this.ultima_columna = casilla[1];
-//		repaint();
+	public void paintCell(GameCell gameCell, Graphics g) {
+		Graphics2D g2d = (Graphics2D) g;
+		
+		// RECTANGLE
+		g2d.setColor(gameCell.getCurrentColor());
+		g2d.fillRoundRect(gameCell.getX(), gameCell.getY(), gameCell.getWidth(), gameCell.getHeight(), 10, 10);
+		
+		// IMAGE
+		g2d.drawImage(image, null, gameCell.getxImage(), gameCell.getYimage());
 	}
 	
+	// LOCALIZE CLICK OF MOUSE
 	private Integer[] convertirCoordenadasACasilla(Integer x, Integer y) {
 		Integer ladoTablero = cellsInX; 
 		Integer altoPanelTablero = getHeight(); 
@@ -99,24 +125,35 @@ public class GameBoard extends JPanel implements MouseListener {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
+		Integer clickX = e.getX();
+		Integer clickY = e.getY();
+		Integer[] casilla = convertirCoordenadasACasilla(clickX, clickY);
+		try {
+			GameCell gameCell = this.board.get(casilla[0]).get(casilla[1]).select();
+			paintCell(gameCell, this.getGraphics());
+		} catch (Exception ex) {
+			System.out.println(ex.getLocalizedMessage());
+		}
+	}
+	
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
 	}
 	
 	// REFRESH

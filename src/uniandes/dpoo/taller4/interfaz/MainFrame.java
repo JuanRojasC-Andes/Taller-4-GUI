@@ -18,12 +18,13 @@ public class MainFrame extends JFrame {
 	private GameBoard gameBoard;
 	private InfoGameDisplay infoGameDisplay;
 	
-	private Integer[] boardOption;
-	
 	public MainFrame() {
 		this.settingsMenu = new SettingsMenu();
 		this.optionsMenu = new OptionsMenu(this);
-		this.gameBoard = new GameBoard(settingsMenu.getBoardOption()[0], settingsMenu.getBoardOption()[1]);
+		this.gameBoard = new GameBoard(
+				settingsMenu.getBoardOption()[0], 
+				settingsMenu.getBoardOption()[1]
+		);
 		this.infoGameDisplay = new InfoGameDisplay();
 		
 //		FlatLightLaf.install();

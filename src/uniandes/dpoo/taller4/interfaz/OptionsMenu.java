@@ -3,6 +3,7 @@ package uniandes.dpoo.taller4.interfaz;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Dialog.ModalityType;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -19,7 +20,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
@@ -36,6 +36,7 @@ public class OptionsMenu extends JPanel {
 	
 	// DATA
 	private String gamer;
+	private Boolean unlockGame;
 	
 	public OptionsMenu(MainFrame mainFrame) {
 		this.mainFrame = mainFrame;
@@ -44,6 +45,7 @@ public class OptionsMenu extends JPanel {
 		this.btnTop10 = new JButton("TOP-10");
 		this.btnChangeGamer = new JButton("CAMBIAR JUGADOR");
 		this.gamer = "";
+		this.unlockGame = false;
 		configOptionsMenu();
 		configBtnNewGame();
 		configBtnRestartGame();
@@ -92,6 +94,7 @@ public class OptionsMenu extends JPanel {
 		this.btnNewGame.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				unlockGame = true;
 				dialogForNameUser("Nuevo Juego", "Nombre Jugador", "Iniciar", true);
 			}
 		});
@@ -138,10 +141,9 @@ public class OptionsMenu extends JPanel {
 
 	private void dialogForNameUser(String titleDialog, String titleLabel, String buttonText, Boolean refreshAll) {
 		// DIALOG
-		JDialog dialog = new JDialog(mainFrame, titleDialog);
+		JDialog dialog = new JDialog(mainFrame, titleDialog, ModalityType.APPLICATION_MODAL);
 		dialog.setSize(350, 200);
 		dialog.setLocationRelativeTo(mainFrame);
-		dialog.setVisible(true);
 		
 		// LAYOUT
 		dialog.setLayout(new BorderLayout());
@@ -183,9 +185,15 @@ public class OptionsMenu extends JPanel {
 		centerPanel.add(btnAccept);
 		
 		dialog.add(centerPanel, BorderLayout.CENTER);
+		
+		dialog.setVisible(true);
 	}
 	
 	public String getGamer() {
 		return gamer;
+	}
+	
+	public Boolean getUnlockGame() {
+		return unlockGame;
 	}
 }
