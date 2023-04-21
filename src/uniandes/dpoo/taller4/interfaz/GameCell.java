@@ -37,6 +37,12 @@ public class GameCell {
 		return this;
 	}
 	
+	public GameCell invert() {
+		this.invertColor();
+		this.isSelected = !this.isSelected;
+		return this;
+	}
+	
 	public void invertColor() {
 		Color current = this.currentColor;
 		this.currentColor = this.roundColor;

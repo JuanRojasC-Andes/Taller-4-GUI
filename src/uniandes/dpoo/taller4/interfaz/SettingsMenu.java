@@ -6,6 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 
 import javax.swing.AbstractButton;
@@ -27,16 +29,18 @@ public class SettingsMenu extends JPanel {
 	private ButtonGroup btnLevelGroup;
 	
 	// DATA
+	private ArrayList<String> optionsLevel;
 	private Integer[] boardOption;
 	private String level;
 	
 	public SettingsMenu() {
+		this.optionsLevel = new ArrayList<String>(Arrays.asList("Facil", "Medio", "Dificil"));
 		this.labelSizeGrid = new JLabel("Tamaño:");
 		this.boxSizeGrid = new JComboBox<String>();
 		this.labelLevel = new JLabel("Dificultad:");
-		this.btnEasyLevel = new JRadioButton("Facil");
-		this.btnMiddleLevel = new JRadioButton("Medio");
-		this.btnHardLevel = new JRadioButton("Dificil");
+		this.btnEasyLevel = new JRadioButton(this.optionsLevel.get(0));
+		this.btnMiddleLevel = new JRadioButton(this.optionsLevel.get(1));
+		this.btnHardLevel = new JRadioButton(this.optionsLevel.get(2));
 		this.btnLevelGroup = new ButtonGroup();
 		configSettingsMenu();
 		configBoxSizeGrid();
@@ -97,6 +101,7 @@ public class SettingsMenu extends JPanel {
 		this.btnLevelGroup.add(btnMiddleLevel);
 		this.btnLevelGroup.add(btnHardLevel);
 		this.btnEasyLevel.setSelected(true);
+		this.level = this.btnEasyLevel.getText();
 		
 		Iterator<AbstractButton> iterator = this.btnLevelGroup.getElements().asIterator();
 		while(iterator.hasNext()) {
@@ -118,5 +123,9 @@ public class SettingsMenu extends JPanel {
 
 	public String getLevel() {
 		return level;
+	}
+	
+	public Integer getLevelNumber() {
+		return this.optionsLevel.indexOf(this.level) + 1;
 	}
 }

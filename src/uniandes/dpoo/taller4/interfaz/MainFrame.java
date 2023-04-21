@@ -29,7 +29,7 @@ public class MainFrame extends JFrame {
 	public MainFrame(Tablero tablero) {
 		this.settingsMenu = new SettingsMenu();
 		this.optionsMenu = new OptionsMenu(this);
-		this.gameBoard = new GameBoard(tablero);
+		this.gameBoard = new GameBoard(tablero, this.settingsMenu.getLevelNumber(), this::refreshData);
 		this.infoGameDisplay = new InfoGameDisplay();
 		this.tablero = tablero;
 		
@@ -66,11 +66,13 @@ public class MainFrame extends JFrame {
 	
 	public void refreshAll() {
 		this.tablero = new Tablero(this.settingsMenu.getBoardOption()[0]);
-		this.gameBoard.refresh(this.tablero);
+		this.gameBoard.refresh(this.tablero, this.settingsMenu.getLevelNumber());
 		this.infoGameDisplay.setPlayer(this.optionsMenu.getGamer());
+		this.infoGameDisplay.setNumberPlays(0);
 	}
 	
 	public void refreshData() {
 		this.infoGameDisplay.setPlayer(this.optionsMenu.getGamer());
+		this.infoGameDisplay.setNumberPlays(this.tablero.darJugadas());
 	}
 }

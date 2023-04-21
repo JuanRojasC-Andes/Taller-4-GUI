@@ -30,16 +30,33 @@ public class GameBoard extends JPanel implements MouseListener {
 	private Integer size;
 	private BufferedImage image;
 	private Tablero tablero;
+	private Integer level;
+	private Runnable eventListener;
 	
 	private List<List<GameCell>> board;
 	
-	public GameBoard(Tablero tablero) {
+	public GameBoard(Tablero tablero, Integer level) {
 		this.tablero = tablero;
+		this.level = level;
 		this.size = tablero.darTablero().length;
 		this.board = new ArrayList<>();
 		this.mainColor = Constants.yellow;
 		this.roundColor = Color.BLACK;
 		configGameBoard();
+		settingsBoard();
+		loadImage();
+	}
+	
+	public GameBoard(Tablero tablero, Integer level, Runnable eventListener) {
+		this.tablero = tablero;
+		this.level = level;
+		this.size = tablero.darTablero().length;
+		this.board = new ArrayList<>();
+		this.mainColor = Constants.yellow;
+		this.roundColor = Color.BLACK;
+		this.eventListener = eventListener;
+		configGameBoard();
+		settingsBoard();
 		loadImage();
 	}
 	
@@ -49,6 +66,10 @@ public class GameBoard extends JPanel implements MouseListener {
 		
 		// CUSTOMIZATION
 		this.setBorder(new EmptyBorder(100, 100, 100, 100));
+	}
+	
+	private void settingsBoard() {
+		this.tablero.desordenar(level);
 	}
 	
 	// LOAD IMAGE FOR ICON LIGHT
@@ -68,10 +89,16 @@ public class GameBoard extends JPanel implements MouseListener {
 		
 		this.widthCell = (this.widthCellMin * 5) / this.size;
 		this.heightCell = (this.heightCellMin * 5) / this.size;
+		boolean[][] tablero = this.tablero.darTablero();
 		
-		for (int y = 0; y < this.size; y++) {
+		for (int y = 0; y < tablero.length; y++) {
+			boolean[] rowTablero = tablero[y];
 			List<GameCell> row = new ArrayList<>();
-			for (int x = 0; x < this.size; x++) {
+			for (int x = 0; x < rowTablero.length; x++) {
+				// BOARD CELL
+				Boolean isOnOrOff = rowTablero[x];
+				Color backgroundColor = isOnOrOff? Color.BLACK : Constants.yellow;
+				
 				// RECTANGLE
 				Integer separator = 4;
 				Integer coordinateX = (x * this.widthCell) + (separator * x);
@@ -81,38 +108,34 @@ public class GameBoard extends JPanel implements MouseListener {
 				Integer coordinateXImage = coordinateX +  ((this.widthCell - image.getWidth()) / 2);
 				Integer coordinateYImage = coordinateY + ((this.heightCell - image.getHeight()) / 2);
 				
-				// CELL DATA
-				GameCell gameCell = new GameCell(
+				// PAINT
+				paintCell(
+						g,
 						coordinateX, 
 						coordinateY, 
 						this.widthCell, 
-						this.heightCell, 
+						this.heightCell,
+						!isOnOrOff,
 						coordinateXImage, 
 						coordinateYImage,
-						this.mainColor,
-						this.roundColor
-						);
-				
-				// PAINT
-				paintCell(gameCell, g);
-				
-				// REGISTER
-				row.add(gameCell);
+						backgroundColor
+						
+				);
 			}
 			this.board.add(row);
 		}
 	}
 	
-	public void paintCell(GameCell gameCell, Graphics g) {
+	public void paintCell(Graphics g, Integer x, Integer y, Integer width, Integer height, Boolean drawImage, Integer imageX, Integer imageY, Color backgroundColor) {
 		Graphics2D g2d = (Graphics2D) g;
 		
 		// RECTANGLE
-		g2d.setColor(gameCell.getCurrentColor());
-		g2d.fillRoundRect(gameCell.getX(), gameCell.getY(), gameCell.getWidth(), gameCell.getHeight(), 10, 10);
+		g2d.setColor(backgroundColor);
+		g2d.fillRoundRect(x, y, width, height, 10, 10);
 		
 		// IMAGE
-		if(!gameCell.getIsSelected()) {
-			g2d.drawImage(image, null, gameCell.getxImage(), gameCell.getYimage());	
+		if(drawImage) {
+			g2d.drawImage(image, null, imageX, imageY);	
 		}
 	}
 	
@@ -134,8 +157,13 @@ public class GameBoard extends JPanel implements MouseListener {
 		Integer clickY = e.getY();
 		Integer[] casilla = convertirCoordenadasACasilla(clickX, clickY);
 		try {
-			GameCell gameCell = this.board.get(casilla[0]).get(casilla[1]).select();
-			paintCell(gameCell, this.getGraphics());
+//			GameCell gameCell = this.board.get(casilla[0]).get(casilla[1]).select();
+//			paintCell(gameCell, this.getGraphics());
+			this.tablero.jugar(casilla[0], casilla[1]);
+			paint(this.getGraphics());
+			if (eventListener != null) {
+				eventListener.run();;
+			}
 		} catch (Exception ex) {
 			System.out.println(ex.getLocalizedMessage());
 		}
@@ -162,9 +190,11 @@ public class GameBoard extends JPanel implements MouseListener {
 	}
 	
 	// REFRESH
-	public void refresh(Tablero tablero) {
+	public void refresh(Tablero tablero, Integer level) {
 		this.tablero = tablero;
+		this.level = level;
 		this.size = tablero.darTablero().length;
+		settingsBoard();
 		paint(this.getGraphics());
 	}
 
