@@ -19,11 +19,11 @@ import uniandes.dpoo.taller4.modelo.Tablero;
 
 public class GameBoard extends JPanel implements MouseListener {
 	
-	private final Integer widthCellMin = 85;
-	private final Integer heightCellMin = 85;
+	private final Integer widthCellMin = 90;
+	private final Integer heightCellMin = 90;
 	
-	private Integer widthCell = 85;
-	private Integer heightCell = 85;
+	private Integer widthCell = 90;
+	private Integer heightCell = 90;
 	private Color mainColor;
 	private Color roundColor;
 	
@@ -73,7 +73,7 @@ public class GameBoard extends JPanel implements MouseListener {
 			List<GameCell> row = new ArrayList<>();
 			for (int x = 0; x < this.size; x++) {
 				// RECTANGLE
-				Integer separator = 2;
+				Integer separator = 4;
 				Integer coordinateX = (x * this.widthCell) + (separator * x);
 				Integer coordinateY = (y * this.heightCell) + (separator * y);
 				
@@ -111,7 +111,9 @@ public class GameBoard extends JPanel implements MouseListener {
 		g2d.fillRoundRect(gameCell.getX(), gameCell.getY(), gameCell.getWidth(), gameCell.getHeight(), 10, 10);
 		
 		// IMAGE
-		g2d.drawImage(image, null, gameCell.getxImage(), gameCell.getYimage());
+		if(!gameCell.getIsSelected()) {
+			g2d.drawImage(image, null, gameCell.getxImage(), gameCell.getYimage());	
+		}
 	}
 	
 	// LOCALIZE CLICK OF MOUSE

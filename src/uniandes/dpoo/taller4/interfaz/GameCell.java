@@ -13,6 +13,7 @@ public class GameCell {
 	private Integer clicked;
 	private Color currentColor;
 	private Color roundColor;
+	private Boolean isSelected;
 	
 	public GameCell(Integer x, Integer y, Integer width, Integer height, Integer xImage, Integer yimage,
 			Color currentColor, Color roundColor) {
@@ -26,11 +27,13 @@ public class GameCell {
 		this.currentColor = currentColor;
 		this.roundColor = roundColor;
 		this.clicked = 0;
+		this.isSelected = false;
 	}
 	
 	public GameCell select() {
 		this.invertColor();
 		this.sumClick();
+		this.isSelected = !this.isSelected;
 		return this;
 	}
 	
@@ -140,5 +143,13 @@ public class GameCell {
 
 	public void setClicked(Integer clicked) {
 		this.clicked = clicked;
+	}
+
+	public Boolean getIsSelected() {
+		return isSelected;
+	}
+
+	public void setIsSelected(Boolean isSelected) {
+		this.isSelected = isSelected;
 	}
 }
