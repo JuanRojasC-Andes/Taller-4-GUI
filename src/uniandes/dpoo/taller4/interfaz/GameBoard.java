@@ -1,6 +1,7 @@
 package uniandes.dpoo.taller4.interfaz;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
@@ -14,6 +15,8 @@ import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import uniandes.dpoo.taller4.modelo.Tablero;
+
 public class GameBoard extends JPanel implements MouseListener {
 	
 	private final Integer widthCellMin = 85;
@@ -24,15 +27,15 @@ public class GameBoard extends JPanel implements MouseListener {
 	private Color mainColor;
 	private Color roundColor;
 	
-	private Integer cellsInX;
-	private Integer cellsInY;
+	private Integer size;
 	private BufferedImage image;
+	private Tablero tablero;
 	
 	private List<List<GameCell>> board;
 	
-	public GameBoard(Integer cellsInX, Integer cellsInY) {
-		this.cellsInX = cellsInX;
-		this.cellsInY = cellsInY;
+	public GameBoard(Tablero tablero) {
+		this.tablero = tablero;
+		this.size = tablero.darTablero().length;
 		this.board = new ArrayList<>();
 		this.mainColor = Constants.yellow;
 		this.roundColor = Color.BLACK;
@@ -41,8 +44,8 @@ public class GameBoard extends JPanel implements MouseListener {
 	}
 	
 	private void configGameBoard() {
-		Integer width = this.cellsInX * this.widthCell;
-		Integer height = this.cellsInY * this.heightCell;
+		Integer width = this.size * this.widthCell;
+		Integer height = this.size * this.heightCell;
 		
 		// CUSTOMIZATION
 		this.setBorder(new EmptyBorder(100, 100, 100, 100));
@@ -63,12 +66,12 @@ public class GameBoard extends JPanel implements MouseListener {
 		super.paint(g);
 		Graphics2D g2d = (Graphics2D) g;
 		
-		this.widthCell = (this.widthCellMin * 5) / this.cellsInX;
-		this.heightCell = (this.heightCellMin * 5) / this.cellsInY;
+		this.widthCell = (this.widthCellMin * 5) / this.size;
+		this.heightCell = (this.heightCellMin * 5) / this.size;
 		
-		for (int y = 0; y < this.cellsInY; y++) {
+		for (int y = 0; y < this.size; y++) {
 			List<GameCell> row = new ArrayList<>();
-			for (int x = 0; x < this.cellsInX; x++) {
+			for (int x = 0; x < this.size; x++) {
 				// RECTANGLE
 				Integer separator = 2;
 				Integer coordinateX = (x * this.widthCell) + (separator * x);
@@ -113,7 +116,7 @@ public class GameBoard extends JPanel implements MouseListener {
 	
 	// LOCALIZE CLICK OF MOUSE
 	private Integer[] convertirCoordenadasACasilla(Integer x, Integer y) {
-		Integer ladoTablero = cellsInX; 
+		Integer ladoTablero = size; 
 		Integer altoPanelTablero = getHeight(); 
 		Integer anchoPanelTablero = getWidth();
 		Integer altoCasilla = altoPanelTablero / ladoTablero; 
@@ -148,18 +151,18 @@ public class GameBoard extends JPanel implements MouseListener {
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
+		this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
+		this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 	}
 	
 	// REFRESH
-	public void refresh(Integer cellsInX, Integer cellsInY) {
-		this.cellsInX = cellsInX;
-		this.cellsInY = cellsInY;
+	public void refresh(Tablero tablero) {
+		this.tablero = tablero;
+		this.size = tablero.darTablero().length;
 		paint(this.getGraphics());
 	}
 

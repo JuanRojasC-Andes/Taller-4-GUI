@@ -40,6 +40,32 @@ public class GameCell {
 		this.roundColor = current;
 	}
 	
+	public void resize(Double value) {
+		Integer newWidth = (int) (this.width * value);
+		Integer newHeight = (int) (this.height * value);
+		Integer newX = Math.abs((this.x - (this.width - newWidth)));
+		Integer newY = Math.abs((this.y - (this.height - newHeight)));
+		this.setWidth(newWidth);
+		this.setHeight(newHeight);
+		this.setX(newX);
+		this.setY(newY);
+	}
+	
+	public GameCell clone() {
+		GameCell clone = new GameCell(
+				this.x,
+				this.y,
+				this.width,
+				this.height,
+				this.xImage,
+				this.yimage,
+				this.currentColor,
+				this.roundColor
+			);
+		clone.setClicked(this.clicked);
+		return clone;
+	}
+	
 	public void sumClick() {
 		this.clicked += 1;
 	}

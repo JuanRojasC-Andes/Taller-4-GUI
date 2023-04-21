@@ -69,13 +69,12 @@ public class SettingsMenu extends JPanel {
 	
 	private void configBoxSizeGrid() {
 		// ITEMS
-		this.boxSizeGrid.addItem("2x2");
 		this.boxSizeGrid.addItem("3x3");
-		this.boxSizeGrid.addItem("4x4");
 		this.boxSizeGrid.addItem("5x5");
+		this.boxSizeGrid.addItem("7x7");
 		
-		this.boxSizeGrid.setSelectedIndex(3);
-		this.boardOption = new Integer[]{5, 5};
+		this.boxSizeGrid.setSelectedIndex(2);
+		this.boardOption = new Integer[]{7, 7};
 		
 		// CUSTOMIZATION
 		this.boxSizeGrid.setForeground(Color.BLACK);

@@ -7,25 +7,31 @@ import javax.swing.JPanel;
 
 import com.formdev.flatlaf.FlatLightLaf;
 
+import uniandes.dpoo.taller4.modelo.Tablero;
+
 public class MainFrame extends JFrame {
 	
 	public static void main(String[] args) {
-		MainFrame mainframe = new MainFrame();
+		Tablero tablero = new Tablero(7);
+		MainFrame mainframe = new MainFrame(tablero);
 	}
 	
+	
+	// COMPONENTS
 	private SettingsMenu settingsMenu;
 	private OptionsMenu optionsMenu;
 	private GameBoard gameBoard;
 	private InfoGameDisplay infoGameDisplay;
 	
-	public MainFrame() {
+	// DATA
+	private Tablero tablero;
+	
+	public MainFrame(Tablero tablero) {
 		this.settingsMenu = new SettingsMenu();
 		this.optionsMenu = new OptionsMenu(this);
-		this.gameBoard = new GameBoard(
-				settingsMenu.getBoardOption()[0], 
-				settingsMenu.getBoardOption()[1]
-		);
+		this.gameBoard = new GameBoard(tablero);
 		this.infoGameDisplay = new InfoGameDisplay();
+		this.tablero = tablero;
 		
 //		FlatLightLaf.install();
 		
@@ -59,7 +65,8 @@ public class MainFrame extends JFrame {
 	}
 	
 	public void refreshAll() {
-		this.gameBoard.refresh(settingsMenu.getBoardOption()[0], settingsMenu.getBoardOption()[1]);
+		this.tablero = new Tablero(this.settingsMenu.getBoardOption()[0]);
+		this.gameBoard.refresh(this.tablero);
 		this.infoGameDisplay.setPlayer(this.optionsMenu.getGamer());
 	}
 	
