@@ -9,13 +9,7 @@ import com.formdev.flatlaf.FlatLightLaf;
 
 import uniandes.dpoo.taller4.modelo.Tablero;
 
-public class MainFrame extends JFrame {
-	
-	public static void main(String[] args) {
-		Tablero tablero = new Tablero(7);
-		MainFrame mainframe = new MainFrame(tablero);
-	}
-	
+public class MainFrame extends LightsOutFrame {
 	
 	// COMPONENTS
 	private SettingsMenu settingsMenu;
@@ -27,11 +21,11 @@ public class MainFrame extends JFrame {
 	private Tablero tablero;
 	
 	public MainFrame(Tablero tablero) {
+		this.tablero = tablero;
 		this.settingsMenu = new SettingsMenu();
 		this.optionsMenu = new OptionsMenu(this);
-		this.gameBoard = new GameBoard(tablero, this.settingsMenu.getLevelNumber(), this::refreshData);
+		this.gameBoard = new GameBoard(this);
 		this.infoGameDisplay = new InfoGameDisplay();
-		this.tablero = tablero;
 		
 //		FlatLightLaf.install();
 		
@@ -64,15 +58,31 @@ public class MainFrame extends JFrame {
 		this.addMouseListener(gameBoard);
 	}
 	
-	public void refreshAll() {
+	public void restart() {
 		this.tablero = new Tablero(this.settingsMenu.getBoardOption()[0]);
-		this.gameBoard.refresh(this.tablero, this.settingsMenu.getLevelNumber());
+		this.gameBoard.refresh();
 		this.infoGameDisplay.setPlayer(this.optionsMenu.getGamer());
 		this.infoGameDisplay.setNumberPlays(0);
 	}
 	
-	public void refreshData() {
+	public void refresh() {
 		this.infoGameDisplay.setPlayer(this.optionsMenu.getGamer());
 		this.infoGameDisplay.setNumberPlays(this.tablero.darJugadas());
+	}
+	
+	public Integer getLevel() {
+		return this.settingsMenu.getLevelNumber();
+	}
+	
+	public Boolean boardIsLock() {
+		return !this.optionsMenu.getUnlockGame();
+	}
+	
+	public Boolean isNewGame() {
+		return this.optionsMenu.getGamer().isEmpty();
+	}
+	
+	public Tablero getBoard() {
+		return this.tablero;
 	}
 }

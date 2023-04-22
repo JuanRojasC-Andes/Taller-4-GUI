@@ -19,45 +19,35 @@ import uniandes.dpoo.taller4.modelo.Tablero;
 
 public class GameBoard extends JPanel implements MouseListener {
 	
+	// MAIN FRAME
+	private LightsOutFrame mainFrame;
+	
+	// CONSTANTS
 	private final Integer widthCellMin = 90;
 	private final Integer heightCellMin = 90;
 	
+	// CUSTOMIZATION VARIABLES
 	private Integer widthCell = 90;
 	private Integer heightCell = 90;
 	private Color mainColor;
 	private Color roundColor;
 	
+	// DATA
 	private Integer size;
 	private BufferedImage image;
 	private Tablero tablero;
 	private Integer level;
-	private Runnable eventListener;
 	
-	private List<List<GameCell>> board;
-	
-	public GameBoard(Tablero tablero, Integer level) {
-		this.tablero = tablero;
-		this.level = level;
-		this.size = tablero.darTablero().length;
-		this.board = new ArrayList<>();
+	public GameBoard(LightsOutFrame mainFrame) {
+		this.mainFrame = mainFrame;
+		this.tablero = mainFrame.getBoard();
+		this.level = mainFrame.getLevel();
+		this.size = mainFrame.getBoard().darTablero().length;
 		this.mainColor = Constants.yellow;
 		this.roundColor = Color.BLACK;
 		configGameBoard();
-		settingsBoard();
 		loadImage();
-	}
-	
-	public GameBoard(Tablero tablero, Integer level, Runnable eventListener) {
-		this.tablero = tablero;
-		this.level = level;
-		this.size = tablero.darTablero().length;
-		this.board = new ArrayList<>();
-		this.mainColor = Constants.yellow;
-		this.roundColor = Color.BLACK;
-		this.eventListener = eventListener;
-		configGameBoard();
 		settingsBoard();
-		loadImage();
 	}
 	
 	private void configGameBoard() {
@@ -69,7 +59,9 @@ public class GameBoard extends JPanel implements MouseListener {
 	}
 	
 	private void settingsBoard() {
-		this.tablero.desordenar(level);
+		if (!this.mainFrame.isNewGame()) {
+			this.tablero.desordenar(level);
+		}
 	}
 	
 	// LOAD IMAGE FOR ICON LIGHT
@@ -93,11 +85,11 @@ public class GameBoard extends JPanel implements MouseListener {
 		
 		for (int y = 0; y < tablero.length; y++) {
 			boolean[] rowTablero = tablero[y];
-			List<GameCell> row = new ArrayList<>();
 			for (int x = 0; x < rowTablero.length; x++) {
 				// BOARD CELL
-				Boolean isOnOrOff = rowTablero[x];
-				Color backgroundColor = isOnOrOff? Color.BLACK : Constants.yellow;
+				Boolean isLightOff = rowTablero[x];
+				Boolean cellStatus = isLightOff && !this.mainFrame.isNewGame();
+				Color backgroundColor = cellStatus? this.roundColor : this.mainColor;
 				
 				// RECTANGLE
 				Integer separator = 4;
@@ -115,14 +107,13 @@ public class GameBoard extends JPanel implements MouseListener {
 						coordinateY, 
 						this.widthCell, 
 						this.heightCell,
-						!isOnOrOff,
+						!cellStatus,
 						coordinateXImage, 
 						coordinateYImage,
 						backgroundColor
 						
 				);
 			}
-			this.board.add(row);
 		}
 	}
 	
@@ -153,19 +144,17 @@ public class GameBoard extends JPanel implements MouseListener {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		Integer clickX = e.getX();
-		Integer clickY = e.getY();
-		Integer[] casilla = convertirCoordenadasACasilla(clickX, clickY);
-		try {
-//			GameCell gameCell = this.board.get(casilla[0]).get(casilla[1]).select();
-//			paintCell(gameCell, this.getGraphics());
-			this.tablero.jugar(casilla[0], casilla[1]);
-			paint(this.getGraphics());
-			if (eventListener != null) {
-				eventListener.run();;
-			}
-		} catch (Exception ex) {
-			System.out.println(ex.getLocalizedMessage());
+		if (!this.mainFrame.boardIsLock()) {
+			Integer clickX = e.getX();
+			Integer clickY = e.getY();
+			Integer[] casilla = convertirCoordenadasACasilla(clickX, clickY);
+			try {
+				this.tablero.jugar(casilla[0], casilla[1]);
+				paint(this.getGraphics());
+				this.mainFrame.refresh();
+			} catch (Exception ex) {
+				System.out.println(ex.getLocalizedMessage());
+			}	
 		}
 	}
 	
@@ -190,10 +179,9 @@ public class GameBoard extends JPanel implements MouseListener {
 	}
 	
 	// REFRESH
-	public void refresh(Tablero tablero, Integer level) {
-		this.tablero = tablero;
-		this.level = level;
-		this.size = tablero.darTablero().length;
+	public void refresh() {
+		this.tablero = this.mainFrame.getBoard();
+		this.size = this.mainFrame.getBoard().darTablero().length;
 		settingsBoard();
 		paint(this.getGraphics());
 	}

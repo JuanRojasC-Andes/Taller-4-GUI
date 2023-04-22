@@ -26,7 +26,7 @@ import javax.swing.border.LineBorder;
 public class OptionsMenu extends JPanel {
 	
 	// MAIN FRAME
-	private MainFrame mainFrame;
+	private LightsOutFrame mainFrame;
 	
 	// COMPONENTS
 	private JButton btnNewGame;
@@ -38,7 +38,7 @@ public class OptionsMenu extends JPanel {
 	private String gamer;
 	private Boolean unlockGame;
 	
-	public OptionsMenu(MainFrame mainFrame) {
+	public OptionsMenu(LightsOutFrame mainFrame) {
 		this.mainFrame = mainFrame;
 		this.btnNewGame = new JButton("NUEVO");
 		this.btnRestartGame = new JButton("REINICIAR");
@@ -108,7 +108,7 @@ public class OptionsMenu extends JPanel {
 		this.btnRestartGame.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				mainFrame.refreshAll();
+				mainFrame.restart();
 			}
 		});
 	}
@@ -178,8 +178,8 @@ public class OptionsMenu extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				gamer = inputNickName.getText();
 				dialog.dispose();
-				if (refreshAll) mainFrame.refreshAll();
-				else mainFrame.refreshData();
+				if (refreshAll) mainFrame.restart();
+				else mainFrame.refresh();
 			}
 		});
 		centerPanel.add(btnAccept);
