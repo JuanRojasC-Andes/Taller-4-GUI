@@ -117,7 +117,7 @@ public class GameBoard extends JPanel implements MouseListener {
 		}
 	}
 	
-	public void paintCell(Graphics g, Integer x, Integer y, Integer width, Integer height, Boolean drawImage, Integer imageX, Integer imageY, Color backgroundColor) {
+	private void paintCell(Graphics g, Integer x, Integer y, Integer width, Integer height, Boolean drawImage, Integer imageX, Integer imageY, Color backgroundColor) {
 		Graphics2D g2d = (Graphics2D) g;
 		
 		// RECTANGLE
