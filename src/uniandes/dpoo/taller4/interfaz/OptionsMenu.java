@@ -95,7 +95,7 @@ public class OptionsMenu extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				unlockGame = true;
-				dialogForNameUser("Nuevo Juego", "Nombre Jugador", "Iniciar", true);
+				dialogForNameUser("Nuevo Juego", "Nombre Jugador", "Iniciar", mainFrame::start);
 			}
 		});
 	}
@@ -134,12 +134,12 @@ public class OptionsMenu extends JPanel {
 		this.btnChangeGamer.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				dialogForNameUser("Cambiar Jugador", "Nombre Jugador", "Cambiar", false);
+				dialogForNameUser("Cambiar Jugador", "Nombre Jugador", "Cambiar", mainFrame::refresh);
 			}
 		});
 	}
 
-	private void dialogForNameUser(String titleDialog, String titleLabel, String buttonText, Boolean refreshAll) {
+	private void dialogForNameUser(String titleDialog, String titleLabel, String buttonText, Runnable action) {
 		// DIALOG
 		JDialog dialog = new JDialog(mainFrame, titleDialog, ModalityType.APPLICATION_MODAL);
 		dialog.setSize(350, 200);
@@ -178,8 +178,7 @@ public class OptionsMenu extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				gamer = inputNickName.getText();
 				dialog.dispose();
-				if (refreshAll) mainFrame.restart();
-				else mainFrame.refresh();
+				action.run();
 			}
 		});
 		centerPanel.add(btnAccept);

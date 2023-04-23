@@ -152,6 +152,9 @@ public class GameBoard extends JPanel implements MouseListener {
 				this.tablero.jugar(casilla[0], casilla[1]);
 				paint(this.getGraphics());
 				this.mainFrame.refresh();
+				if (this.tablero.tableroIluminado()) {
+					this.mainFrame.finish();
+				}
 			} catch (Exception ex) {
 				System.out.println(ex.getLocalizedMessage());
 			}	
