@@ -11,17 +11,24 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.stream.Collectors;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+
+import uniandes.dpoo.taller4.modelo.RegistroTop10;
 
 public class OptionsMenu extends JPanel {
 	
@@ -121,7 +128,56 @@ public class OptionsMenu extends JPanel {
 		this.btnTop10.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("boton top 10 oprimido");
+				// DIALOG
+				JDialog dialog = new JDialog(mainFrame, "Top 10", ModalityType.APPLICATION_MODAL);
+				dialog.setSize(350, 350);
+				dialog.setLocationRelativeTo(mainFrame);
+				
+				// LAYOUT
+				dialog.setLayout(new BorderLayout());
+				
+				// COMPONENTS
+				JLabel title = new JLabel(" TOP 10 Jugadores");
+				title.setBackground(Constants.blueColor);
+				title.setForeground(Color.WHITE);
+				title.setOpaque(true);
+				title.setFont(new Font(getName(), Font.PLAIN, 14));
+				title.setHorizontalAlignment(SwingConstants.CENTER);
+				title.setBorder(new EmptyBorder(5, 10, 5, 10));
+				dialog.add(title, BorderLayout.NORTH);
+				
+				JPanel centerPanel = new JPanel();
+				centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
+				centerPanel.setBorder(new EmptyBorder(30, 50, 30, 50));
+				
+				// JList
+				DefaultListModel<RegistroTop10> listModel = new DefaultListModel<>();
+				listModel.addAll(mainFrame.getTop().darRegistros().stream().collect(Collectors.toList()));
+				JList top10List = new JList(listModel);
+				top10List.setCellRenderer(new TopRankingCell());
+				top10List.setFocusable(false);
+				JScrollPane jScrollPane = new JScrollPane(top10List);
+				jScrollPane.setBorder(null);
+				centerPanel.add(jScrollPane);
+				
+				centerPanel.add(Box.createRigidArea(new Dimension(200, 20)));
+				
+				JButton btnAccept = new JButton("Salir");
+				configBtnDefault(btnAccept);
+				btnAccept.setBorder(new EmptyBorder(10, 40, 10 ,40));
+				btnAccept.setAlignmentX(CENTER_ALIGNMENT);
+				btnAccept.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+
+						dialog.dispose();
+					}
+				});
+				centerPanel.add(btnAccept);
+				
+				dialog.add(centerPanel, BorderLayout.CENTER);
+				
+				dialog.setVisible(true);
 			}
 		});
 	}
